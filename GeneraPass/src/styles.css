@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+
+.app-btn{
+    cursor: pointer;
+    padding: .5rem;
+    border: 1px solid #555;
+}
+
+.app-btn:hover{
+    background-color: rgb(161, 192, 255);
+}

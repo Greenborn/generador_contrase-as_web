@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GeneratePasswordComponent } from './components/generate-password/generate-password.component';
+import { allIcons, NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { GeneratePasswordComponent } from './components/generate-password/genera
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    NgxBootstrapIconsModule.pick(allIcons),
+    FormsModule,ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
