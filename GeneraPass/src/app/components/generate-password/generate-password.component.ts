@@ -41,8 +41,8 @@ export class GeneratePasswordComponent implements OnInit {
   }
 
   generatePassword(){
-    if (this.passwordOptions.long < 0){
-      alert('La longitud de la contraseña debe ser mayor a 0');
+    if (this.passwordOptions.long < 7){
+      alert('La longitud de la contraseña debe ser igual o mayor a 8');
       return false;
     }
 
