@@ -5,5 +5,6 @@ La idea detras del mismo es de poder generar contraseñas seguras aleatorias med
 
 Actualmente el mismo está funcional, aunque es muy simple, en un futuro se podría ampliar su funcionalidad, y si gustas también podes aportar a mejorarlo, ya que es Software Libre.
 
-Puedes ver un post sobre el mismo en: https://blog.greenborn.com.ar/2022/02/21/generador-de-contrasenas-en-angular/
+El proyecto actualmente está en funcionamiento en: https://demos.greenborn.com.ar/pass-generator/
 
+Puedes ver un post sobre el mismo en: https://blog.greenborn.com.ar/2022/02/21/generador-de-contrasenas-en-angular/
