@@ -4,4 +4,8 @@ export class PasswordOptions {
     public minus:boolean = true;
     public symbol:boolean = true;
     public numbers:boolean = true;
+
+    public availableSymbols:string = '';
+    public availableNumbers:string = '';
+    public availableChars:string   = '';
 }

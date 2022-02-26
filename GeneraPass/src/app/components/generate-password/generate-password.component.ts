@@ -16,6 +16,14 @@ export class GeneratePasswordComponent implements OnInit {
   private passCont!: HTMLInputElement;
 
   ngOnInit(): void {
+    this.resetearOpciones();
+  }
+
+  resetearOpciones(){
+    this.passwordOptions = new PasswordOptions();
+    this.passwordOptions.availableSymbols = '!$%&/()=?^_-:;@*º|#~{[]}';
+    this.passwordOptions.availableNumbers = '0123456789';
+    this.passwordOptions.availableChars   = 'abcdefghijklmnñopqrstuvwxyz';
   }
 
   copyToClipboard(){
@@ -48,6 +56,21 @@ export class GeneratePasswordComponent implements OnInit {
       return false;
     }
 
+    if (this.passwordOptions.availableSymbols == ''){
+      alert('Revise las opciones avanzadas, se debe especificar al menos un sìmbolo o caracter especial');
+      return false;
+    }
+
+    if (this.passwordOptions.availableNumbers == ''){
+      alert('Revise las opciones avanzadas, se debe especificar al menos un número');
+      return false;
+    }
+
+    if (this.passwordOptions.availableChars == ''){
+      alert('Revise las opciones avanzadas, se debe especificar al menos una letra');
+      return false;
+    }
+
     this.password = '';
     for (let c=0; c < this.passwordOptions.long; c++){
       this.password += this.getPasswordChar();
@@ -66,43 +89,48 @@ export class GeneratePasswordComponent implements OnInit {
         if (!this.passwordOptions.mayus) { //si no se seleccionaron las mayusculas
           return this.getPasswordChar();
         }
-        return this.getCaracter(this.letras).toUpperCase();
+        return this.getCaracter(this.passwordOptions.availableChars).toUpperCase();
       break;
 
       case 2:
         if (!this.passwordOptions.minus) { //si no se seleccionaron las minusculas
           return this.getPasswordChar();
         }
-        return this.getCaracter(this.letras);
+        return this.getCaracter(this.passwordOptions.availableChars);
       break;
 
       case 3:
         if (!this.passwordOptions.numbers) { //si no se seleccionaron numeros
           return this.getPasswordChar();
         }
-        return this.getNumero();
+        return this.getCaracter(this.passwordOptions.availableNumbers);
       break;
 
       case 4:
         if (!this.passwordOptions.symbol) { //si no se seleccionaron simbolos
           return this.getPasswordChar();
         }
-        return this.getCaracter(this.simbolos);
+        return this.getCaracter(this.passwordOptions.availableSymbols);
       break;
     }
     return ch;
   }
 
-  private letras:string = 'abcdefghijklmnñopqrstuvwxyz';
-  private simbolos:string= '!$%&/()=?^_-:;@*º|#~{[]}';
+  public opciones_avanzadas:boolean = false;
+  public opciones_avanzadas_btnText = 'Ver opciones avanzadas';
+  opciones_avanzadasTG(){
+    this.opciones_avanzadas = !this.opciones_avanzadas;
+    if (this.opciones_avanzadas){
+      this.opciones_avanzadas_btnText = 'Ocultar opciones avanzadas';
+    } else {
+      this.opciones_avanzadas_btnText = 'Ver opciones avanzadas';
+    }
+  }
+
   getCaracter(chs:string):string{
     let chsCount  = chs.length -1;
     let chsSelect = Math.round( Math.random() * (chsCount - 0) + 0 );
     return chs[chsSelect];
-  }
-
-  private getNumero():string{
-    return String(Math.round( Math.random() * (9 - 0) + 0 ));
   }
 
 }
