@@ -8,3 +8,4 @@
 ## 2022-03-01
 - Se modifica el código con una orientación a POO
 - Se agrega posibilidad de generar contraseñas a partir del servicio de palabras al azar
+- Se agrega imagen de fondo
