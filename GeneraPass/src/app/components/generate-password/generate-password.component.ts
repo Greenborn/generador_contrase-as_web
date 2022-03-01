@@ -14,7 +14,7 @@ export class GeneratePasswordComponent implements OnInit {
   ) { }
 
   public password:string = '';
-  public passwordOptions:PasswordOptions = new PasswordOptions();
+  public passwordOptions:PasswordOptions = new PasswordOptions({ publicRandomWordService: this.publicRandomWordService });
 
   private passCont!: HTMLInputElement;
 
@@ -23,7 +23,7 @@ export class GeneratePasswordComponent implements OnInit {
   }
 
   resetearOpciones(){
-    this.passwordOptions = new PasswordOptions();
+    this.passwordOptions = new PasswordOptions({ publicRandomWordService: this.publicRandomWordService });
   }
 
   copyToClipboard(){
@@ -43,8 +43,8 @@ export class GeneratePasswordComponent implements OnInit {
   generatePassword(){
 
     //VALIDACIONES
-    if (this.passwordOptions.long < 7){
-      alert('La longitud de la contraseña debe ser igual o mayor a 8');
+    if (this.passwordOptions.long < 1){
+      alert('La longitud de la contraseña debe ser igual o mayor a 1');
       return false;
     }
 
@@ -67,27 +67,33 @@ export class GeneratePasswordComponent implements OnInit {
     }
 
     //CONTRUIR CONTRASEÑA
-    this.password = '';
-    for (let c=0; c < this.passwordOptions.long; c++){
-      this.password += this.getPasswordChar();
+    this.tmp_pass = [];
+    for (let c = 0; c < this.passwordOptions.long; c++){
+      this.getRandomChar(c);          
     }
 
     return true;
   }
 
-  getPasswordChar():string{
+  getRandomChar(c:number){
     //se genera un numero al azar entre 1 y 4, dicho numero representa el tipo de caracter a insertar
     let option:number = Math.round( Math.random() * (this.passwordOptions.passwordParts.length - 1) );
-    let ch:string     = '';
-    
-    if (!this.passwordOptions.passwordParts[ option ].enabled){
-        return this.getPasswordChar();
+    if (this.passwordOptions.passwordParts[ option ].enabled){
+        this.passwordOptions.passwordParts[ option ].getPart( (char:any)=> { this.updatePass(c,char.split("\n").join("")); } );
     } else {
-        return this.passwordOptions.passwordParts[ option ].getPart();
+        this.getRandomChar(c);
     }
-
-    return ch;
   }
+
+  public tmp_pass:any = [];
+  updatePass( pos:number, char:string ){
+    this.tmp_pass[pos] = char;
+    this.password = '';
+    for (let c=0; c < this.tmp_pass.length; c++){
+      this.password += this.tmp_pass[c];
+    }
+  }
+
 
   public opciones_avanzadas:boolean = false;
   public opciones_avanzadas_btnText = 'Ver opciones avanzadas';

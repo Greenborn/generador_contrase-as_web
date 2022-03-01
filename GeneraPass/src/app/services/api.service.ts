@@ -54,10 +54,8 @@ export abstract class ApiService<T> {
       return this.http.get<ApiSerializedResponse<K>>(url).pipe(
         map((data) => {
           console.log('get all', url, data)
-          this.all = data.items;
-          this.total_count = data._meta.totalCount;
-          this.getAllOK.next(this.all);
-          return data.items
+          this.all = data;
+          return this.all;
         })
       );
     }
