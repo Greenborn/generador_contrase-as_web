@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GeneratePasswordComponent } from './components/generate-password/generate-password.component';
 import { allIcons, NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NgbModule,
     NgxBootstrapIconsModule.pick(allIcons),
     FormsModule,ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { PublicRandomWordService } from 'src/app/services/public.random.word';
 import { PasswordOptions } from './models/password.options';
 
 @Component({
@@ -8,7 +9,9 @@ import { PasswordOptions } from './models/password.options';
 })
 export class GeneratePasswordComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private publicRandomWordService: PublicRandomWordService
+  ) { }
 
   public password:string = '';
   public passwordOptions:PasswordOptions = new PasswordOptions();
@@ -21,9 +24,6 @@ export class GeneratePasswordComponent implements OnInit {
 
   resetearOpciones(){
     this.passwordOptions = new PasswordOptions();
-    this.passwordOptions.availableSymbols = '!$%&/()=?^_-:;@*º|#~{[]}';
-    this.passwordOptions.availableNumbers = '0123456789';
-    this.passwordOptions.availableChars   = 'abcdefghijklmnñopqrstuvwxyz';
   }
 
   copyToClipboard(){
@@ -41,12 +41,18 @@ export class GeneratePasswordComponent implements OnInit {
   }
 
   generatePassword(){
+
+    //VALIDACIONES
     if (this.passwordOptions.long < 7){
       alert('La longitud de la contraseña debe ser igual o mayor a 8');
       return false;
     }
 
-    if (!(this.passwordOptions.minus || this.passwordOptions.mayus || this.passwordOptions.numbers || this.passwordOptions.symbol)){
+    let optsTrue:boolean = false;
+    for ( let c=0; c < this.passwordOptions.passwordParts.length; c++){
+      optsTrue = optsTrue || this.passwordOptions.passwordParts[c].enabled;
+    }
+    if (!optsTrue){
       alert('Es necesario elegir al menos una opcion de tipo de contraseña');
       return false;
     }
@@ -56,21 +62,11 @@ export class GeneratePasswordComponent implements OnInit {
       return false;
     }
 
-    if (this.passwordOptions.availableSymbols == ''){
-      alert('Revise las opciones avanzadas, se debe especificar al menos un sìmbolo o caracter especial');
-      return false;
+    for ( let c=0; c < this.passwordOptions.passwordParts.length; c++){
+      this.passwordOptions.passwordParts[c].validate();
     }
 
-    if (this.passwordOptions.availableNumbers == ''){
-      alert('Revise las opciones avanzadas, se debe especificar al menos un número');
-      return false;
-    }
-
-    if (this.passwordOptions.availableChars == ''){
-      alert('Revise las opciones avanzadas, se debe especificar al menos una letra');
-      return false;
-    }
-
+    //CONTRUIR CONTRASEÑA
     this.password = '';
     for (let c=0; c < this.passwordOptions.long; c++){
       this.password += this.getPasswordChar();
@@ -81,38 +77,15 @@ export class GeneratePasswordComponent implements OnInit {
 
   getPasswordChar():string{
     //se genera un numero al azar entre 1 y 4, dicho numero representa el tipo de caracter a insertar
-    let option:number = Math.round( Math.random() * (4 - 1) + 1 );
+    let option:number = Math.round( Math.random() * (this.passwordOptions.passwordParts.length - 1) );
     let ch:string     = '';
     
-    switch (option){
-      case 1:
-        if (!this.passwordOptions.mayus) { //si no se seleccionaron las mayusculas
-          return this.getPasswordChar();
-        }
-        return this.getCaracter(this.passwordOptions.availableChars).toUpperCase();
-      break;
-
-      case 2:
-        if (!this.passwordOptions.minus) { //si no se seleccionaron las minusculas
-          return this.getPasswordChar();
-        }
-        return this.getCaracter(this.passwordOptions.availableChars);
-      break;
-
-      case 3:
-        if (!this.passwordOptions.numbers) { //si no se seleccionaron numeros
-          return this.getPasswordChar();
-        }
-        return this.getCaracter(this.passwordOptions.availableNumbers);
-      break;
-
-      case 4:
-        if (!this.passwordOptions.symbol) { //si no se seleccionaron simbolos
-          return this.getPasswordChar();
-        }
-        return this.getCaracter(this.passwordOptions.availableSymbols);
-      break;
+    if (!this.passwordOptions.passwordParts[ option ].enabled){
+        return this.getPasswordChar();
+    } else {
+        return this.passwordOptions.passwordParts[ option ].getPart();
     }
+
     return ch;
   }
 
@@ -125,12 +98,6 @@ export class GeneratePasswordComponent implements OnInit {
     } else {
       this.opciones_avanzadas_btnText = 'Ver opciones avanzadas';
     }
-  }
-
-  getCaracter(chs:string):string{
-    let chsCount  = chs.length -1;
-    let chsSelect = Math.round( Math.random() * (chsCount - 0) + 0 );
-    return chs[chsSelect];
   }
 
 }
