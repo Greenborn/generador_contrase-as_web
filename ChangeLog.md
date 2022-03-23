@@ -1,5 +1,8 @@
 # Historial del cambios
 
+## 2022-03-23
+- Se modifican los alerts por un nuevo componente que se encarga de mostrar una alerta modal
+
 ## 2022-03-08
 - Se agregan Meta-tags y se cambia el título
 

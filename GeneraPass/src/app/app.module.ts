@@ -8,11 +8,13 @@ import { GeneratePasswordComponent } from './components/generate-password/genera
 import { allIcons, NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MessageComponent } from './components/message/message.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GeneratePasswordComponent
+    GeneratePasswordComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,

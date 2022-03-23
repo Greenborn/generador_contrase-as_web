@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AppUIUtilsService } from 'src/app/services/app.ui.utils.service';
 import { PublicRandomWordService } from 'src/app/services/public.random.word';
 import { PasswordOptions } from './models/password.options';
 
@@ -10,7 +11,8 @@ import { PasswordOptions } from './models/password.options';
 export class GeneratePasswordComponent implements OnInit {
 
   constructor(
-    private publicRandomWordService: PublicRandomWordService
+    private publicRandomWordService: PublicRandomWordService,
+    private appUIUtilsService:       AppUIUtilsService
   ) { }
 
   public password:string = '';
@@ -28,14 +30,18 @@ export class GeneratePasswordComponent implements OnInit {
 
   copyToClipboard(){
     if (this.password == '') {
-      alert('Para poder copiar una contraseña primero es necesario generar una nueva');
-      return false;
+        this.appUIUtilsService.displayAlert("Para poder copiar una contraseña primero es necesario generar una nueva.", 'Atención', [
+            { text:'Aceptar', css_class: 'btn-primary',callback:()=> { this.appUIUtilsService.dissmissAlert(); } }
+        ]);
+        return false;
     }
 
     this.passCont = document.getElementById("passCont") as HTMLInputElement;
     this.passCont.select();
     document.execCommand('copy');
-    alert("¡Contraseña copiada al portapapeles!");
+    this.appUIUtilsService.displayAlert("¡Contraseña copiada al portapapeles!", 'Atención', [
+        { text:'Aceptar', css_class: 'btn-primary',callback:()=> { this.appUIUtilsService.dissmissAlert(); } }
+    ]);
 
     return true;
   }
@@ -44,8 +50,10 @@ export class GeneratePasswordComponent implements OnInit {
 
     //VALIDACIONES
     if (this.passwordOptions.long < 1){
-      alert('La longitud de la contraseña debe ser igual o mayor a 1');
-      return false;
+        this.appUIUtilsService.displayAlert('La longitud de la contraseña debe ser igual o mayor a 1', 'Atención', [
+            { text:'Aceptar', css_class: 'btn-primary',callback:()=> { this.appUIUtilsService.dissmissAlert(); } }
+        ]);
+        return false;
     }
 
     let optsTrue:boolean = false;
@@ -53,13 +61,17 @@ export class GeneratePasswordComponent implements OnInit {
       optsTrue = optsTrue || this.passwordOptions.passwordParts[c].enabled;
     }
     if (!optsTrue){
-      alert('Es necesario elegir al menos una opcion de tipo de contraseña');
-      return false;
+        this.appUIUtilsService.displayAlert('Es necesario elegir al menos una opcion de tipo de contraseña', 'Atención', [
+            { text:'Aceptar', css_class: 'btn-primary',callback:()=> { this.appUIUtilsService.dissmissAlert(); } }
+        ]);
+        return false;
     }
 
     if (this.passwordOptions.long >= 10000){
-      alert('La cantidad de caracteres ingresada es demasiado grande!');
-      return false;
+        this.appUIUtilsService.displayAlert('La cantidad de caracteres ingresada es demasiado grande!', 'Atención', [
+            { text:'Aceptar', css_class: 'btn-primary',callback:()=> { this.appUIUtilsService.dissmissAlert(); } }
+        ]);
+        return false;
     }
 
     for ( let c=0; c < this.passwordOptions.passwordParts.length; c++){
